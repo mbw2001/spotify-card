@@ -33,6 +33,7 @@ export enum ConfigEntry {
   Hide_Top_Header,
   Hide_Currently_Playing,
   Hide_Playback_Controls,
+  Show_Simple_Config_Editor
 }
 
 export interface SpotifyCardConfig extends LovelaceCardConfig {
@@ -76,7 +77,8 @@ export interface SpotifyCardConfig extends LovelaceCardConfig {
   hide_currently_playing?: boolean;
   //hide the playback controls
   hide_playback_controls?: boolean;
-  // locale
+  //show simple config editor
+  show_simple_config_editor?: boolean;
 }
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types

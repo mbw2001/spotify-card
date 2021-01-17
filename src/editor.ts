@@ -174,7 +174,8 @@ export class SpotifyCardEditor extends LitElement implements LovelaceCardEditor 
         return this.config?.hide_currently_playing ?? false;
       case ConfigEntry.Hide_Playback_Controls:
         return this.config?.hide_playback_controls ?? false;
-
+      case ConfigEntry.Show_Simple_Config_Editor:
+        return this.config?.show_simple_config_editor ?? false;
       default:
         break;
     }
@@ -229,7 +230,7 @@ export class SpotifyCardEditor extends LitElement implements LovelaceCardEditor 
             </paper-listbox>
           </paper-dropdown-menu>
           <paper-input
-            class=${this.getValue(ConfigEntry.Playlist_Type) == 'featured' ? 'shown' : 'hidden' }
+            class=${this.getValue(ConfigEntry.Playlist_Type) == 'featured' ? '' : 'hidden' }
             label=${localize('settings.country_code')}
             .value=${this.getValue(ConfigEntry.Country_Code)}
             .configValue=${'country_code'}
@@ -264,6 +265,7 @@ export class SpotifyCardEditor extends LitElement implements LovelaceCardEditor 
     return html`
       <div class="values">
         <paper-input
+          class=${this.getValue(ConfigEntry.Hide_Top_Header) ? 'hidden' : '' }
           label=${localize('settings.title')}
           .value=${this.getValue(ConfigEntry.Name)}
           .configValue=${'name'}
@@ -375,12 +377,28 @@ export class SpotifyCardEditor extends LitElement implements LovelaceCardEditor 
             ></ha-switch>
           </ha-formfield>
         </div>
+        <ha-formfield label=${localize('settings.show_simple_config_editor')}>
+            <ha-switch
+              .checked=${this.getValue(ConfigEntry.Show_Simple_Config_Editor)}
+              .configValue=${'show_simple_config_editor'}
+              @change=${this.valueChanged}
+              .id=${'show_simple_config_editor'}
+            ></ha-switch>
+          </ha-formfield>
       </div>
     `;
   }
 
   protected render(): TemplateResult | void {
     if (!this.hass) return html``;
+
+    if (this.getValue(ConfigEntry.Show_Simple_Config_Editor)) return html`
+      <div class="card-config">
+        ${this.renderGeneral()}
+        ${this.renderAppearance()}
+        ${this.renderAdvanced()}
+      </div>
+    `
 
     return html`
       <div class="card-config">
@@ -414,18 +432,19 @@ export class SpotifyCardEditor extends LitElement implements LovelaceCardEditor 
       }
       .option ha-icon {
         float: left;
-        margin-top: 7px;
+        margin-top: 5px;
         pointer-events: none;
       }
       .option div {
-        margin-left: 35px;
+        margin-left: 30px;
         pointer-events: none;
       }
       .secondary {
+        margin-top: -4px;
         color: var(--secondary-text-color);
       }
       ha-switch {
-        padding: 16px 6px;
+        padding: 10px 6px;
       }
       .side-by-side {
         display: flex;
